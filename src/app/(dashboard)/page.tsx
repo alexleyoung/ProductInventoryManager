@@ -2,8 +2,8 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div>
+    <section>
       <h1>Product Inventory Manager</h1>
-    </div>
+    </section>
   );
 }
