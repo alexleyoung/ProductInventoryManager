@@ -1,5 +1,6 @@
 "use client";
 
+import { addItem } from "@/actions/addItem";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -44,9 +45,14 @@ const AddForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-  }
+  const onSubmit = async (item: z.infer<typeof formSchema>) => {
+    console.log(item);
+    const err = await addItem(item);
+
+    if (err) {
+      console.error("Error adding product: ");
+    }
+  };
 
   return (
     <Form {...form}>

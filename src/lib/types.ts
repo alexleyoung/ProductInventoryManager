@@ -3,6 +3,7 @@ export type Product = {
   id?: string; // Optional because Firestore will generate it
   name: string;
   description: string;
-  price?: number;
+  price: number;
   quantity: number;
+  unit: string;
 };
