@@ -2,10 +2,11 @@
 
 import { Product } from "@/lib/types";
 import {
-  setDoc,
-  collection,
   doc,
+  collection,
+  setDoc,
   getDocs,
+  updateDoc,
   deleteDoc,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -34,7 +35,15 @@ export const getItems = async () => {
 };
 
 // Update a product in the database; returns true if there's an error
-export const updateItem = async (item: Product) => {};
+export const updateItem = async (item: Product) => {
+  try {
+    const itemRef = doc(collection(db, "items"), item.name);
+    await updateDoc(itemRef, item);
+  } catch (error) {
+    console.error("Error updating product: ", error);
+    return true;
+  }
+};
 
 // Delete a product from the database; returns true if there's an error
 export const deleteItem = async (item: Product) => {

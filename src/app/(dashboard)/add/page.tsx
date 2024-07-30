@@ -7,7 +7,7 @@ const Add = () => {
       <div className='w-96 p-4 flex flex-col gap-4'>
         <h1 className='text-2xl font-medium'>Add a New Product</h1>
         <div>
-          <AddForm>
+          <AddForm req='create'>
             <Button type='submit'>Add</Button>
           </AddForm>
         </div>

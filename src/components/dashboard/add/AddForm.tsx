@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -19,11 +18,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useToast } from "@/components/ui/use-toast";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { addItem } from "@/actions/crud";
+import { addItem, updateItem } from "@/actions/crud";
+import { Product } from "@/lib/types";
 
 const formSchema = z.object({
   name: z.string().min(1),
@@ -33,24 +34,62 @@ const formSchema = z.object({
   unit: z.enum(["unit", "g", "kg", "oz", "lb", "ml", "l", "fl oz", "gal"]),
 });
 
-const AddForm = ({ children }: { children: React.ReactNode }) => {
+const AddForm = ({
+  children,
+  item,
+  req,
+}: {
+  children: React.ReactNode;
+  item?: Product;
+  req: "create" | "update";
+}) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      description: "",
-      price: 0,
-      quantity: 1,
-      unit: "unit",
+      name: item ? item.name : "",
+      description: item ? item.description : "",
+      price: item ? item.price : 0,
+      quantity: item ? item.quantity : 1,
+      unit: item ? item.unit : "unit",
     },
   });
 
-  const onSubmit = async (item: z.infer<typeof formSchema>) => {
-    console.log(item);
-    const err = await addItem(item);
+  const { toast } = useToast();
 
-    if (err) {
-      console.error("Error adding product: ");
+  const onSubmit = async (item: z.infer<typeof formSchema>) => {
+    // Add the item to the database
+    if (req === "create") {
+      const err = await addItem(item);
+
+      if (err) {
+        console.error("Error adding product: ");
+        toast({
+          variant: "destructive",
+          title: "Error!",
+          description: "There was an issue creating the item.",
+        });
+      }
+
+      toast({
+        title: "Success!",
+        description: "Item has been added to the database.",
+      });
+    } else if (req === "update") {
+      // Update the item in the database
+      const err = await updateItem(item);
+
+      if (err) {
+        console.error("Error updating product: ");
+        toast({
+          variant: "destructive",
+          title: "Error!",
+          description: "There was an issue updating the item.",
+        });
+      }
+      toast({
+        title: "Success!",
+        description: "Item has been updated in the database.",
+      });
     }
   };
 
@@ -62,6 +101,7 @@ const AddForm = ({ children }: { children: React.ReactNode }) => {
         <FormField
           control={form.control}
           name='name'
+          defaultValue={item ? item.name : ""}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Name</FormLabel>
@@ -92,7 +132,7 @@ const AddForm = ({ children }: { children: React.ReactNode }) => {
             <FormItem>
               <FormLabel>Price</FormLabel>
               <FormControl>
-                <Input type='number' placeholder='Price' {...field} />
+                <Input type='number' placeholder='0' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -106,7 +146,7 @@ const AddForm = ({ children }: { children: React.ReactNode }) => {
               <FormItem className='col-span-2'>
                 <FormLabel>Quantity</FormLabel>
                 <FormControl>
-                  <Input type='number' placeholder='Quantity' {...field} />
+                  <Input type='number' placeholder='1' {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

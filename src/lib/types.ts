@@ -4,5 +4,5 @@ export type Product = {
   description: string;
   price: number;
   quantity: number;
-  unit: string;
+  unit: "unit" | "g" | "kg" | "oz" | "lb" | "ml" | "l" | "fl oz" | "gal";
 };

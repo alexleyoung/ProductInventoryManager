@@ -4,7 +4,7 @@ const DashLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Sidebar />
-      <main className='ml-[4.3rem]'>{children}</main>
+      <section className='ml-[4.3rem]'>{children}</section>
     </>
   );
 };

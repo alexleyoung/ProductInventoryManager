@@ -18,13 +18,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -49,6 +46,8 @@ import {
 import * as React from "react";
 import { Product } from "@/lib/types";
 import { deleteItem } from "@/actions/crud";
+import AddForm from "./add/AddForm";
+import { useToast } from "../ui/use-toast";
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -95,6 +94,7 @@ export const columns: ColumnDef<Product>[] = [
     cell: ({ row }) => {
       const quantity = row.original.quantity;
       const unit = row.original.unit;
+      if (quantity !== 1) return `${quantity} ${unit}s`;
 
       return `${quantity} ${unit}`;
     },
@@ -103,6 +103,7 @@ export const columns: ColumnDef<Product>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
+      const { toast } = useToast();
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -114,25 +115,33 @@ export const columns: ColumnDef<Product>[] = [
           <DropdownMenuContent side='right'>
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Dialog>
-                <DialogTrigger className='w-full text-left p-2 text-sm hover:bg-accent transition-colors rounded-md'>
-                  Edit
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Are you absolutely sure?</DialogTitle>
-                    <DialogDescription>
-                      This action cannot be undone. This will permanently delete
-                      your account and remove your data from our servers.
-                    </DialogDescription>
-                  </DialogHeader>
-                </DialogContent>
-              </Dialog>
-            </DropdownMenuItem>
+            {/* edit button */}
+            <Popover>
+              <PopoverTrigger className='w-full p-2 hover:bg-accent text-sm text-left'>
+                Edit
+              </PopoverTrigger>
+              <PopoverContent className='scale-105'>
+                <AddForm item={row.original} req='update'>
+                  <Button type='submit'>Save</Button>
+                </AddForm>
+              </PopoverContent>
+            </Popover>
+            {/* delete button */}
             <DropdownMenuItem
               onClick={async () => {
-                await deleteItem(row.original);
+                const err = await deleteItem(row.original);
+                if (err) {
+                  console.error("Error deleting product: ");
+                  toast({
+                    variant: "destructive",
+                    title: "Error!",
+                    description: "There was an issue deleting the item.",
+                  });
+                }
+                toast({
+                  title: "Success!",
+                  description: "Item has been deleted from the database.",
+                });
               }}>
               Delete
             </DropdownMenuItem>
@@ -178,7 +187,7 @@ export function DataTable<TData, TValue>({
   return (
     <div className='w-full'>
       {/* table settings */}
-      <div className='flex w-full justify-between items-center py-4 gap-1 lg:gap-2'>
+      <div className='flex justify-between items-center py-4 gap-1 lg:gap-2'>
         {/* search filter */}
         <Input
           placeholder='Search by name...'
@@ -186,7 +195,7 @@ export function DataTable<TData, TValue>({
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
-          className='max-w-sm'
+          className='w-full'
         />
         {/* pagination */}
         <div className='flex items-center gap-1 lg:gap-2'>
