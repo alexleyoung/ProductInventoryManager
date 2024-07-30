@@ -1,6 +1,5 @@
 "use client";
 
-import { addItem } from "@/actions/addItem";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -24,13 +23,14 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { addItem } from "@/actions/crud";
 
 const formSchema = z.object({
   name: z.string().min(1),
   description: z.string().min(1),
   price: z.coerce.number().nonnegative(),
   quantity: z.coerce.number().nonnegative().int().min(1),
-  unit: z.enum(["count", "g", "kg", "oz", "lb", "ml", "l", "fl oz", "gal"]),
+  unit: z.enum(["unit", "g", "kg", "oz", "lb", "ml", "l", "fl oz", "gal"]),
 });
 
 const AddForm = () => {
@@ -41,7 +41,7 @@ const AddForm = () => {
       description: "",
       price: 0,
       quantity: 1,
-      unit: "count",
+      unit: "unit",
     },
   });
 
@@ -128,7 +128,7 @@ const AddForm = () => {
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Generic</SelectLabel>
-                        <SelectItem value='count'>count</SelectItem>
+                        <SelectItem value='unit'>unit</SelectItem>
                       </SelectGroup>
                       <SelectGroup>
                         <SelectLabel>Mass</SelectLabel>

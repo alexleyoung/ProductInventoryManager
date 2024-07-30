@@ -45,7 +45,7 @@ const Sidebar = () => {
         <Separator />
         <Sheet>
           <SheetTrigger className='w-12'>
-            <div className='hover:bg-foreground/10 transition-colors rounded-md'>
+            <div className='hover:bg-accent transition-colors rounded-md'>
               {">"}
             </div>
           </SheetTrigger>
