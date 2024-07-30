@@ -17,9 +17,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import {
+  ArrowUpDown,
+  MoreHorizontal,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 
 import {
   ColumnDef,
@@ -35,11 +48,22 @@ import {
 } from "@tanstack/react-table";
 import * as React from "react";
 import { Product } from "@/lib/types";
+import { deleteItem } from "@/actions/crud";
 
 export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "name",
-    header: "Name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className='-ml-4 min-w-4'>
+          Name
+          <ArrowUpDown className='ml-2 size-4' />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "price",
@@ -47,9 +71,10 @@ export const columns: ColumnDef<Product>[] = [
       return (
         <Button
           variant='ghost'
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className='-ml-4'>
           Price
-          <ArrowUpDown className='ml-2 h-4 w-4' />
+          <ArrowUpDown className='ml-2 size-4' />
         </Button>
       );
     },
@@ -60,9 +85,10 @@ export const columns: ColumnDef<Product>[] = [
       return (
         <Button
           variant='ghost'
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className='-ml-4'>
           Quantity
-          <ArrowUpDown className='ml-2 h-4 w-4' />
+          <ArrowUpDown className='ml-2 size-4' />
         </Button>
       );
     },
@@ -88,8 +114,28 @@ export const columns: ColumnDef<Product>[] = [
           <DropdownMenuContent side='right'>
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Dialog>
+                <DialogTrigger className='w-full text-left p-2 text-sm hover:bg-accent transition-colors rounded-md'>
+                  Edit
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Are you absolutely sure?</DialogTitle>
+                    <DialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      your account and remove your data from our servers.
+                    </DialogDescription>
+                  </DialogHeader>
+                </DialogContent>
+              </Dialog>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={async () => {
+                await deleteItem(row.original);
+              }}>
+              Delete
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -130,8 +176,10 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div>
-      <div className='flex items-center py-4 gap-2'>
+    <div className='w-full'>
+      {/* table settings */}
+      <div className='flex w-full justify-between items-center py-4 gap-1 lg:gap-2'>
+        {/* search filter */}
         <Input
           placeholder='Search by name...'
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -140,11 +188,25 @@ export function DataTable<TData, TValue>({
           }
           className='max-w-sm'
         />
+        {/* pagination */}
+        <div className='flex items-center gap-1 lg:gap-2'>
+          <Button
+            variant='outline'
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}>
+            <ChevronLeft />
+          </Button>
+          <Button
+            variant='outline'
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}>
+            <ChevronRight />
+          </Button>
+        </div>
+        {/* column visibility */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant='outline' className='ml-auto'>
-              Columns
-            </Button>
+            <Button variant='outline'>Cols</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end'>
             {table
@@ -166,6 +228,8 @@ export function DataTable<TData, TValue>({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      {/* data table */}
       <div className='rounded-md border'>
         <Table>
           <TableHeader>
@@ -213,22 +277,6 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
-      </div>
-      <div className='flex items-center justify-end space-x-2 py-4'>
-        <Button
-          variant='outline'
-          size='sm'
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}>
-          Previous
-        </Button>
-        <Button
-          variant='outline'
-          size='sm'
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}>
-          Next
-        </Button>
       </div>
     </div>
   );

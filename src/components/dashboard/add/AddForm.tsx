@@ -33,7 +33,7 @@ const formSchema = z.object({
   unit: z.enum(["unit", "g", "kg", "oz", "lb", "ml", "l", "fl oz", "gal"]),
 });
 
-const AddForm = () => {
+const AddForm = ({ children }: { children: React.ReactNode }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -152,7 +152,7 @@ const AddForm = () => {
             )}
           />
         </div>
-        <Button type='submit'>Add</Button>
+        {children}
       </form>
     </Form>
   );

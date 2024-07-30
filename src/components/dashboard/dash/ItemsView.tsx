@@ -1,14 +1,23 @@
+"use client";
+
 import { getItems } from "@/actions/crud";
 import { DataTable, columns } from "@/components/dashboard/DataTable";
+import { Product } from "@/lib/types";
+import { useState, useEffect } from "react";
 
-const ItemsView = async () => {
-  const items = await getItems();
+const ItemsView = () => {
+  const [items, setItems] = useState<Product[]>([]);
 
-  return (
-    <div className='container p-4'>
-      <DataTable columns={columns} data={items} />
-    </div>
-  );
+  const fetchData = async () => {
+    const items = await getItems();
+    setItems(items);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  return <DataTable columns={columns} data={items} />;
 };
 
 export default ItemsView;

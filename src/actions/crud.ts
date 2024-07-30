@@ -1,7 +1,13 @@
 "use server";
 
 import { Product } from "@/lib/types";
-import { setDoc, collection, doc, getDocs } from "firebase/firestore";
+import {
+  setDoc,
+  collection,
+  doc,
+  getDocs,
+  deleteDoc,
+} from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 // Add a new product to the database; returns true if there's an error
@@ -29,3 +35,13 @@ export const getItems = async () => {
 
 // Update a product in the database; returns true if there's an error
 export const updateItem = async (item: Product) => {};
+
+// Delete a product from the database; returns true if there's an error
+export const deleteItem = async (item: Product) => {
+  try {
+    await deleteDoc(doc(collection(db, "items"), item.name));
+  } catch (error) {
+    console.error("Error deleting product: ", error);
+    return true;
+  }
+};

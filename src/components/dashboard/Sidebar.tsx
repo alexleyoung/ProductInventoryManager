@@ -20,7 +20,7 @@ const Sidebar = () => {
   const pathname = usePathname();
 
   return (
-    <aside className='border-r border-primary-border w-[4.3rem] h-screen fixed flex flex-col justify-between items-center py-4'>
+    <aside className='bg-background border-r border-primary-border w-[4.3rem] h-screen fixed flex flex-col justify-between items-center py-4 z-50'>
       {/* top half */}
       <div className='flex flex-col items-center justify-around gap-2'>
         <FigmaLogoIcon className='w-8 h-8' />
