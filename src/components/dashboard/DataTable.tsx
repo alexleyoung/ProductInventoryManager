@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 import {
   ArrowUpDown,
   MoreHorizontal,
@@ -47,7 +48,6 @@ import * as React from "react";
 import { Product } from "@/lib/types";
 import { deleteItem } from "@/actions/crud";
 import AddForm from "./add/AddForm";
-import { useToast } from "../ui/use-toast";
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -94,7 +94,8 @@ export const columns: ColumnDef<Product>[] = [
     cell: ({ row }) => {
       const quantity = row.original.quantity;
       const unit = row.original.unit;
-      if (quantity !== 1) return `${quantity} ${unit}s`;
+      if (quantity !== 1 && unit !== "oz" && unit !== "fl oz" && unit !== "gal")
+        return `${quantity} ${unit}s`;
 
       return `${quantity} ${unit}`;
     },

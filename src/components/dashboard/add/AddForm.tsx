@@ -28,9 +28,9 @@ import { Product } from "@/lib/types";
 
 const formSchema = z.object({
   name: z.string().min(1),
-  description: z.string().min(1),
+  description: z.string(),
   price: z.coerce.number().nonnegative(),
-  quantity: z.coerce.number().nonnegative().int().min(1),
+  quantity: z.coerce.number().nonnegative().min(0.000000000000001),
   unit: z.enum(["unit", "g", "kg", "oz", "lb", "ml", "l", "fl oz", "gal"]),
 });
 
