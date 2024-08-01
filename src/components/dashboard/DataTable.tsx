@@ -138,6 +138,7 @@ export const columns: ColumnDef<Product>[] = [
                     title: "Error!",
                     description: "There was an issue deleting the item.",
                   });
+                  return;
                 }
                 toast({
                   title: "Success!",

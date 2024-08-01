@@ -68,6 +68,7 @@ const AddForm = ({
           title: "Error!",
           description: "There was an issue creating the item.",
         });
+        return;
       }
 
       toast({
@@ -85,6 +86,7 @@ const AddForm = ({
           title: "Error!",
           description: "There was an issue updating the item.",
         });
+        return;
       }
       toast({
         title: "Success!",
