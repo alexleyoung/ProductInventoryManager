@@ -1,3 +1,4 @@
+import { getRecipes } from "@/actions/openai";
 import ItemsView from "@/components/dashboard/dash/ItemsView";
 
 export default function Home() {
