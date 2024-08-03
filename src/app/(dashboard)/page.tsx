@@ -1,7 +1,7 @@
-import { getRecipes } from "@/actions/openai";
-import ItemsView from "@/components/dashboard/dash/ItemsView";
+import { generateText } from "@/actions/gemini";
+import ItemsView from "@/components/dashboard/ItemsView";
 
-export default function Home() {
+const Home = async () => {
   return (
     <section className='p-4 h-screen grid gap-4'>
       <div className='flex flex-col gap-2'>
@@ -10,4 +10,6 @@ export default function Home() {
       </div>
     </section>
   );
-}
+};
+
+export default Home;

@@ -47,7 +47,7 @@ import {
 import * as React from "react";
 import { Product } from "@/lib/types";
 import { deleteItem } from "@/actions/crud";
-import AddForm from "./add/AddForm";
+import AddForm from "./AddForm";
 
 export const columns: ColumnDef<Product>[] = [
   {

@@ -1,4 +1,4 @@
-import AddForm from "@/components/dashboard/add/AddForm";
+import AddForm from "@/components/dashboard/AddForm";
 import { Button } from "@/components/ui/button";
 
 const Add = () => {
