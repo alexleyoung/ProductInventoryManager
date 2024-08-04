@@ -31,7 +31,7 @@ const formSchema = z.object({
   description: z.string(),
   price: z.coerce.number().nonnegative(),
   quantity: z.coerce.number().nonnegative().min(0.000000000000001),
-  unit: z.enum(["unit", "g", "kg", "oz", "lb", "ml", "l", "fl oz", "gal"]),
+  unit: z.enum(["unit", "g", "kg", "oz", "lb", "ml", "L", "fl oz", "gal"]),
 });
 
 const AddForm = ({

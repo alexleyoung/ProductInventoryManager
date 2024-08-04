@@ -1,33 +1,44 @@
 "use client";
 
-import { generateText } from "@/actions/gemini";
+import chat from "@/actions/openrouter";
 import { Product } from "@/lib/types";
 import { useEffect, useState } from "react";
 
 const Recipes = ({ items }: { items: Product[] }) => {
   const [recipes, setRecipes] = useState("");
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  //   const getRecipes = async () => {
-  //     const recipes = await generateText(
-  //       "What meals or baked goods can I make with eggs, milk, and flour and sugar?"
-  //     );
-  //     return setRecipes(recipes);
-  //   };
+  useEffect(() => {
+    (async () => {
+      if (items) {
+        const prompt = `Given the following ingredients: ${items
+          .map((item) => String(item.quantity + item.unit + item.name))
+          .join(
+            ", "
+          )}, what are some recipes I can make? Please return a series of foods in a comma separated list.`;
+        const response = await chat(prompt);
+        if (!response || response.error) {
+          console.log(response.error);
+          setError(true);
+          setLoading(false);
+          return;
+        }
+        setRecipes(response.choices[0].message.content);
+        setLoading(false);
+      }
+    })();
+  }, [items]);
 
-  //   useEffect(() => {
-  //     getRecipes();
-  //   }),
-  //     [];
-  const test = () => {
-    console.log(
-      generateText(
-        "What meals or baked goods can I make with eggs, milk, and flour and sugar?"
-      )
-    );
-  };
-  test();
-
-  return <div>{recipes}</div>;
+  return (
+    <div className='w-full h-full border rounded-md border-accent'>
+      {loading
+        ? "..."
+        : error
+        ? "Sorry, there was an error with the AI api! (probably a rate limit)"
+        : recipes}
+    </div>
+  );
 };
 
 export default Recipes;

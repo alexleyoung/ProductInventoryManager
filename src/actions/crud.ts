@@ -30,7 +30,7 @@ export const getItems = async () => {
   querySnapshot.forEach((doc) => {
     items.push(doc.data() as Product);
   });
-
+  console.log(items);
   return items;
 };
 

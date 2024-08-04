@@ -1,4 +1,4 @@
-import { generateText } from "@/actions/gemini";
+import { generateText } from "@/app/api/gemini";
 import ItemsView from "@/components/dashboard/ItemsView";
 
 const Home = async () => {
