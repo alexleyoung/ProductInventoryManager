@@ -32,6 +32,7 @@ const formSchema = z.object({
   price: z.coerce.number().nonnegative(),
   quantity: z.coerce.number().nonnegative().min(0.000000000000001),
   unit: z.enum(["unit", "g", "kg", "oz", "lb", "ml", "L", "fl oz", "gal"]),
+  image: z.string().optional(),
 });
 
 const AddForm = ({
@@ -51,6 +52,7 @@ const AddForm = ({
       price: item ? item.price : 0,
       quantity: item ? item.quantity : 1,
       unit: item ? item.unit : "unit",
+      image: item ? item.image : "",
     },
   });
 
@@ -194,6 +196,19 @@ const AddForm = ({
             )}
           />
         </div>
+        <FormField
+          control={form.control}
+          name='image'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Image</FormLabel>
+              <FormControl>
+                <Input type='file' placeholder='0' {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         {children}
       </form>
     </Form>

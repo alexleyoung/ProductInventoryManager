@@ -9,7 +9,7 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { LayoutPanelLeft, Plus } from "lucide-react";
+import { LayoutPanelLeft, Plus, ChefHat } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 import Link from "next/link";
@@ -35,6 +35,13 @@ const Sidebar = () => {
         <Button variant='ghost' asChild>
           <Link href='/add'>
             <Plus className={pathname == "/add" ? "text-selected" : ""} />
+          </Link>
+        </Button>
+        <Button variant='ghost' disabled>
+          <Link href='/recipes'>
+            <ChefHat
+              className={pathname == "/recipes" ? "text-selected" : ""}
+            />
           </Link>
         </Button>
         <Separator />

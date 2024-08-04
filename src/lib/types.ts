@@ -5,6 +5,7 @@ export type Product = {
   price: number;
   quantity: number;
   unit: "unit" | "g" | "kg" | "oz" | "lb" | "ml" | "L" | "fl oz" | "gal";
+  image?: string;
 };
 
 // Openrouter Response - Subtypes below
@@ -81,3 +82,14 @@ type ToolCall = {
   type: "function";
   function: FunctionCall;
 };
+
+// Recipe definition
+export type Recipe = [
+  // name
+  string,
+  {
+    description: string;
+    ingredients: string[];
+    steps: string[];
+  }
+];

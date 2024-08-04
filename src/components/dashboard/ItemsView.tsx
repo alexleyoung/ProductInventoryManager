@@ -12,13 +12,12 @@ const ItemsView = () => {
   useEffect(() => {
     (async () => {
       const items = await getItems();
-      console.log(items);
       setItems(items);
     })();
   }, []);
 
   return (
-    <div className='flex md:flex-col h-full gap-4'>
+    <div className='flex flex-col h-full gap-4'>
       <DataTable columns={columns} data={items} />
       <Recipes items={items} />
     </div>
