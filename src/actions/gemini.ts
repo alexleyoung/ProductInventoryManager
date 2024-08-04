@@ -1,10 +1,18 @@
+"use server";
+
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
-
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 export const generateText = async (prompt: string) => {
   const result = await model.generateContent(prompt);
-  return result.response.text();
+  const response = await result.response;
+  const text = response.text();
+  console.log(text);
+  return text;
 };
+
+generateText(
+  "What meals or baked goods can I make with eggs, milk, and flour and sugar?"
+);

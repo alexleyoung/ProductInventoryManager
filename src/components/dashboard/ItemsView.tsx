@@ -21,7 +21,7 @@ const ItemsView = () => {
   return (
     <>
       <DataTable columns={columns} data={items} />
-      <Recipes />
+      <Recipes items={items} />
     </>
   );
 };
